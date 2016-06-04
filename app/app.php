@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+date_default_timezone_set('Europe/Amsterdam');
+
+
 require 'bootstrap.php';
 $config = require 'config.php';
 $container = new \Pimple\Container();
@@ -13,7 +16,8 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $commands = array(
-    new \App\Commands\Listen(null, $container['queue-manager'])
+    new \App\Commands\Listen(null, $container),
+    new \App\Commands\LogPrinter(null, $container)
 );
 
 foreach ($commands as $command) {

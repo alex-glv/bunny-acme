@@ -20,15 +20,11 @@ class Listen extends Command
      */
     protected $container;
     
-    public function __construct($name = null, \BunnyAcme\Queue\QueueManager $queueManager) {
+    public function __construct($name = null, \Pimple\Container $container) {
         parent::__construct($name);
-        $this->queueManager = $queueManager;
+        $this->queueManager = $container['queue-manager'];
     }
     
-    /**
-     * 
-     * @param \Pimple\Container $container
-     */
     protected function configure()
     {
         $this

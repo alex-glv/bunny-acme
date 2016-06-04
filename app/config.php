@@ -9,7 +9,7 @@ use \Monolog\Handler\AmqpHandler;
 return array(
     "amqp-config" => function ($c) {
         $amqpCfg = new stdClass;
-        $amqpCfg->host = "10.0.2.2";
+        $amqpCfg->host = "172.17.0.3";
         $amqpCfg->port = 5672;
         $amqpCfg->user = "guest";
         $amqpCfg->pass = "guest";
@@ -32,8 +32,22 @@ return array(
             'sleep' => array(
                 new \BunnyAcme\Queue\Workers\SleepyWorker($c)
             )
+            
         );
     },
+    "logger" => function($c) {
+        $connection = $c["amqp-connection"];
+        $log = new \Monolog\Logger('local.queue.log');
+        $logChannel = $connection->channel();
+        $logChannel->exchange_declare("local.queue.log", 'fanout', false, false, false);
+        $handler = new \Monolog\Handler\AmqpHandler($logChannel, 'local.queue.log', \Monolog\Logger::DEBUG);
+
+        $log->pushHandler($handler);
+        $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor());
+        $log->pushProcessor(new \Monolog\Processor\PsrLogMessageProcessor());
+
+        return $log;
+    }
      
 );
         
