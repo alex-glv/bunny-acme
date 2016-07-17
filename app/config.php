@@ -46,8 +46,21 @@ return array(
             'sleep' => array(
                 new \BunnyAcme\Queue\Workers\SleepyWorker($c)
             )
+            
         );
     },
+    "logger" => function($c) {
+        $connection = $c["amqp-connection"];
+        $log = new \Monolog\Logger('local.queue.log');
+        $logChannel = $connection->channel();
+        $logChannel->exchange_declare("local.queue.log", 'fanout', false, false, false);
+        $handler = new \Monolog\Handler\AmqpHandler($logChannel, 'local.queue.log', \Monolog\Logger::DEBUG);
 
+        $log->pushHandler($handler);
+        $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor());
+        $log->pushProcessor(new \Monolog\Processor\PsrLogMessageProcessor());
+
+        return $log;
+    }
 );
         
