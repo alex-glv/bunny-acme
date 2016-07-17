@@ -19,7 +19,7 @@ class AMQPDriver implements Driver {
         $amqpConfig = $container['amqp-config'];
         $this->exchangeName = $amqpConfig->exchange_name;
         if (!($connection instanceof \PhpAmqpLib\Connection\AMQPConnection)) {
-            throw new Exception(sprintf("Expected \\PhpAmqpLib\\Connection\\AMQPConnection, got %s", get_class($connection)));
+            throw new \RuntimeException(sprintf("Expected \\PhpAmqpLib\\Connection\\AMQPConnection, got %s", get_class($connection)));
         }
         $this->connection = $connection;
         $this->container = $container;

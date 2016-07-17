@@ -26,7 +26,6 @@ class QueueManager {
      */
     public function getWorkers($queueName) {
         $queueConfiguration = $this->container["queues-list"];
-        var_export($this->container);
         if (!isset($queueConfiguration[$queueName])) {
             throw new \Exception(sprintf("No workers exist for '%s' queue", $queueName));
         }

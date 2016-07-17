@@ -1,7 +1,7 @@
 {
     "name": "alex-glv/bunnyacme",
     "require": {
-	"php-amqplib/php-amqplib": "v2.1.0"
+	"amqplib/amqplib": "v2.6.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",
