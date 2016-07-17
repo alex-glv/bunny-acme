@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3
+    hostname: rabbitmq
+  bunnyacme:
+    depends_on:
+      - rabbitmq
+    build: .
+    hostname: bunnyacme
+    volumes:
+      - ../:/bunnyacme
+    links:
+      - rabbitmq
+    command: php /bunnyacme/app/app.php queue:executor sleep
+        
