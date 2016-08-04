@@ -25,11 +25,10 @@ return array(
             try {
                 $conn = new \PhpAmqpLib\Connection\AMQPConnection($config->host, $config->port, $config->user, $config->pass);
                 return $conn;
-            } catch (\PhpAmqpLib\Exception\AMQPRuntimeException $exception) {
+		} catch (ErrorException $e) {
                 if ($slept >= $config->timeout) {
                     throw $exception;
                 }
-                echo "$slept\n";
                 $slept += 1;
                 sleep(1);
             }
@@ -57,7 +56,7 @@ return array(
         $handler = new \Monolog\Handler\AmqpHandler($logChannel, 'local.queue.log', \Monolog\Logger::DEBUG);
 
         $log->pushHandler($handler);
-        $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor());
+        # $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor()); 
         $log->pushProcessor(new \Monolog\Processor\PsrLogMessageProcessor());
 
         return $log;

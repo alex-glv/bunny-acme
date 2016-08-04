@@ -17,7 +17,8 @@ $application = new Application();
 
 $commands = array(
     new \App\Commands\Listen(null, $container),
-    new \App\Commands\LogPrinter(null, $container)
+    new \App\Commands\LogPrinter(null, $container),
+    new \App\Commands\AddQueueItems(null, $container)
 );
 
 foreach ($commands as $command) {

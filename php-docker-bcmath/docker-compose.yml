@@ -14,4 +14,26 @@ services:
     links:
       - rabbitmq
     command: php /bunnyacme/app/app.php queue:executor sleep
+  push:
+    depends_on:
+      - rabbitmq
+      - bunnyacme
+    build: .
+    hostname: bunnyacme-2
+    volumes:
+      - ../:/bunnyacme
+    links:
+      - rabbitmq
+    command: php /bunnyacme/app/app.php dev:push
+  logs:
+    depends_on:
+      - rabbitmq
+    build: .
+    hostname: bunnyacme-3
+    volumes:
+      - ../:/bunnyacme
+    links:
+      - rabbitmq
+    command: php /bunnyacme/app/app.php dev:logs
+        
         

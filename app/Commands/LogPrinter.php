@@ -24,7 +24,7 @@ class LogPrinter extends Command
     protected function configure()
     {
         $this
-            ->setName('log:print')
+            ->setName('dev:logs')
             ->setDescription('Print logs from queues')
             
             ;

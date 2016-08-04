@@ -69,7 +69,7 @@ class AMQPDriver implements Driver {
         // $logger = $this->container['logger'];
         // $logger->addInfo("Calling __destruct on AMQPDriver");
         try {
-            if ($this->channel && $this->channel->is_open) {
+            if ($this->channel) {
                 $this->channel->close();
             }
         } catch (\Exception $e) {
