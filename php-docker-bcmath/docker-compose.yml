@@ -2,24 +2,37 @@ version: '2'
 
 services:
   rabbitmq:
-    image: rabbitmq:3
+    image: rabbitmq:3-management
     hostname: rabbitmq
-  bunnyacme:
+    ports:
+      - 8080:15672
+  worker1:
     depends_on:
       - rabbitmq
     build: .
-    hostname: bunnyacme
+    hostname: worker1
     volumes:
       - ../:/bunnyacme
     links:
       - rabbitmq
     command: php /bunnyacme/app/app.php queue:executor sleep
+
+  worker2:
+    depends_on:
+      - rabbitmq
+    build: .
+    hostname: worker2
+    volumes:
+      - ../:/bunnyacme
+    links:
+      - rabbitmq
+    command: php /bunnyacme/app/app.php queue:executor sleep
+
   push:
     depends_on:
       - rabbitmq
-      - bunnyacme
     build: .
-    hostname: bunnyacme-2
+    hostname: bunnyacme
     volumes:
       - ../:/bunnyacme
     links:
@@ -35,5 +48,3 @@ services:
     links:
       - rabbitmq
     command: php /bunnyacme/app/app.php dev:logs
-        
-        

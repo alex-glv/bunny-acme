@@ -12,8 +12,9 @@ class SleepyWorker extends \BunnyAcme\Queue\Workers\AbstractWorker implements Wo
      */
     public function handleJob($payload) {
         $this->container["logger"]->addDebug("Sleepy reporting: {payload}", array("payload" => $payload));
-        sleep(1);
-        
+        if(rand(1,100) >= 90) {
+            sleep(1);
+        }
     }
 }
 

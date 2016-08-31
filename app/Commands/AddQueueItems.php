@@ -38,7 +38,7 @@ class AddQueueItems extends Command {
         $this
             ->setName('dev:push')
             ->setDescription('Push items to the queue')
-            
+            ->addArgument("rate", InputArgument::OPTIONAL, "Message rate", 1)
             ;
         
     }
@@ -49,11 +49,13 @@ class AddQueueItems extends Command {
         $driver = $this->container['queue-manager']->getDriver();
         $counter = 0;
         while (1) {
-            $counter += 1;
-            $this->container["logger"]->addDebug("Sending the probe number ${counter}");
-            $payload = serialize(array('message' => "Hello ${counter} times!"));
-            $driver->sendMessage('sleep', $payload);
-            sleep(3);
+            for($count = 0; $count < rand(1, 100); $count++) {
+                $counter += 1;
+                $this->container["logger"]->addDebug("Sending the probe number ${counter}");
+                $payload = serialize(array('message' => "Hello ${counter} times!"));
+                $driver->sendMessage('sleep', $payload);
+            }
+            sleep(1);
         }
     }
 }

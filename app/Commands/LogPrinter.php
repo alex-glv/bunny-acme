@@ -33,6 +33,7 @@ class LogPrinter extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        sleep(5);
         set_error_handler(function ($errno, $errstr, $errfile, $errline){});
                
         $callback = function (\PhpAmqpLib\Message\AMQPMessage $msg) use ($output) {

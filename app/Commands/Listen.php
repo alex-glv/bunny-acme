@@ -42,8 +42,8 @@ class Listen extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $output->writeln('Attaching to the queue');
             $this->listen($input->getArgument('queue'));
-            $output->writeln('Attached to queue');
         } catch (Exception $exception) {
             $output->writeln(sprintf("Exception thrown when attaching queue listener: %s", $exception->getMessage()));
         } 

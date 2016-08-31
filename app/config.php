@@ -27,7 +27,7 @@ return array(
                 return $conn;
 		} catch (ErrorException $e) {
                 if ($slept >= $config->timeout) {
-                    throw $exception;
+                    throw $e;
                 }
                 $slept += 1;
                 sleep(1);
