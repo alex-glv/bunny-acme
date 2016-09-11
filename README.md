@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/alex-glv/bunny-acme.svg?style=svg)](https://circleci.com/gh/alex-glv/bunny-acme)
+
 # bunnyacme
 A simple hassle-free queue system
 
