@@ -14,7 +14,7 @@ return array(
         $amqpCfg->user = "guest";
         $amqpCfg->pass = "guest";
         $amqpCfg->exchange_name = "local.queue.events";
-        $amqpCfg->timeout = 5;
+        $amqpCfg->timeout = 20;
         return $amqpCfg;
     },
 

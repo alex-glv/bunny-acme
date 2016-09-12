@@ -6,6 +6,7 @@ services:
     hostname: rabbitmq
     ports:
       - 8080:15672
+      
   worker1:
     depends_on:
       - rabbitmq
@@ -38,6 +39,7 @@ services:
     links:
       - rabbitmq
     command: php /bunnyacme/app/app.php dev:push
+    
   logs:
     depends_on:
       - rabbitmq
