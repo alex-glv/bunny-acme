@@ -42,10 +42,7 @@ return array(
     },
     "queues-list" => function ($c) {
         return array(
-            'sleep' => array(
-                new \BunnyAcme\Queue\Workers\SleepyWorker($c)
-            )
-
+            'sleep' => new \BunnyAcme\Queue\Workers\SleepyWorker($c)
         );
     },
     "logger" => function($c) {

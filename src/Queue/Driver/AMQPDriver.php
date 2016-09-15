@@ -36,30 +36,33 @@ class AMQPDriver implements Driver {
         $this->channel->basic_publish($message, $this->exchangeName, $queue, true);
     }
 
-    public function listen($queue, $workers) {
+    /**
+     * @param $queue
+     * @param Worker $worker
+     * @throws \Exception
+     */
+
+    public function listen($queue, $worker) {
         $queueDeclareTitle = substr(sprintf("BunnyAcme.events.%s", $queue), 0, 255);
         list($autoQueueName,, ) = $this->channel->queue_declare($queueDeclareTitle, false, true, false, false);
         $this->channel->queue_bind($autoQueueName, $this->exchangeName, $queue);
         $logger = $this->container['logger'];
         $channel = $this->channel;
-        /** @var Worker $worker */
-        foreach ($workers as $worker) {
-            if (!($worker instanceof Worker)) {
-                throw new \Exception(sprintf("Class %s is not instance of Worker interface", get_class($worker)));
-            }
-            $this->channel->basic_consume($autoQueueName, '', false, false, false, false, function($payload) use ($worker, $channel, $queue, $logger) {
-                try {
-                    $logger->addInfo("Received item over {queue} queue", array("message" => $payload, "queue" => $queue));
-                    $worker->handleJob($payload->body);
-                } catch (\Exception $e) {
-                    // log message
-                    $logger->addCritical('Exception when executing the job: {msg}', array('msg' => $e->getMessage(), 'payload' => $payload));
-                    return false;
-                }
-                $channel->basic_ack($payload->delivery_info['delivery_tag']);
-            }
-            );
+        if (!($worker instanceof Worker)) {
+            throw new \Exception(sprintf("Class %s is not instance of Worker interface", get_class($worker)));
         }
+        $this->channel->basic_consume($autoQueueName, '', false, false, false, false, function($payload) use ($worker, $channel, $queue, $logger) {
+            try {
+                $logger->addInfo("Received item over {queue} queue", array("message" => $payload, "queue" => $queue));
+                $worker->handleJob($payload->body);
+            } catch (\Exception $e) {
+                // log message
+                $logger->addCritical('Exception when executing the job: {msg}', array('msg' => $e->getMessage(), 'payload' => $payload));
+                return false;
+            }
+            $channel->basic_ack($payload->delivery_info['delivery_tag']);
+        }
+        );
         while (count($this->channel->callbacks)) {
             $this->channel->wait();
         }

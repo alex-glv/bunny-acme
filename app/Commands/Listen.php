@@ -52,9 +52,9 @@ class Listen extends Command
     protected function listen($queueName) 
     {
         /** @var \BunnyAcme\Queue\Driver\Driver $driver */
-        $workers = $this->queueManager->getWorkers($queueName);
+        $worker = $this->queueManager->getWorker($queueName);
         $driver = $this->queueManager->getDriver();
 
-        $driver->listen($queueName, $workers);
+        $driver->listen($queueName, $worker);
     }
 }

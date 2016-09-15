@@ -2,6 +2,8 @@
 
 namespace BunnyAcme\Queue;
 
+use BunnyAcme\Queue\Workers\Worker;
+
 class QueueManager {
     protected $container;
 
@@ -21,15 +23,15 @@ class QueueManager {
 
     /**
      * @param $queueName
-     * @return mixed
+     * @return Worker $worker
      * @throws \Exception
      */
-    public function getWorkers($queueName) {
+    public function getWorker($queueName) {
         $queueConfiguration = $this->container["queues-list"];
         if (!isset($queueConfiguration[$queueName])) {
             throw new \Exception(sprintf("No workers exist for '%s' queue", $queueName));
         }
-        $workersMap = $queueConfiguration[$queueName];
-        return $workersMap;
+        $worker = $queueConfiguration[$queueName];
+        return $worker;
     }
 }

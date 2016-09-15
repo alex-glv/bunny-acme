@@ -51,7 +51,6 @@ class AddQueueItems extends Command {
         while (1) {
             for($count = 0; $count < rand(1, 100); $count++) {
                 $counter += 1;
-                $this->container["logger"]->addDebug("Sending the probe number ${counter}");
                 $payload = serialize(array('message' => "Hello ${counter} times!"));
                 $driver->sendMessage('sleep', $payload);
             }
